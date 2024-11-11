@@ -1,0 +1,10 @@
+[Desktop Entry]
+Categories=Game;ActionGame
+Comment=Directory for LibreQuake mods
+Exec=io.github.lavenderdotpet.LibreQuake.mods.sh
+Icon=io.github.lavenderdotpet.LibreQuake
+Keywords=quake;librequake
+MimeType=
+Name=LibreQuake mod path
+Type=Application
+Terminal=false
