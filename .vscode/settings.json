@@ -1,0 +1,16 @@
+{
+    "files.watcherExclude": {
+        ".git/objects/**": true,
+        ".git/subtree-cache/**": true,
+        ".hg/store/**": true,
+        "*/.git/objects/**": true,
+        "*/.git/subtree-cache/**": true,
+        "*/.hg/store/**": true,
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/.hg/store/**": true,
+        ".flatpak/**": true,
+        "_build/**": true
+    },
+    "cmake.sourceDirectory": "/var/home/outrider/Development/io.github.lavenderdotpet.LibreQuake/shared-modules/cld2"
+}
