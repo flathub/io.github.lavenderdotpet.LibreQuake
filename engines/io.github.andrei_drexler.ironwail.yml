@@ -13,6 +13,8 @@ sources:
     path: io.github.sezero.quakespasm.png
   - type: patch
     path: io.github.sezero.quakespasm.userdir_log.patch
+  - type: patch
+    path: io.github.andrei_drexler.ironwail.autosave-userdir.patch
 no-autogen: true
 no-make-install: true
 subdir: Quake

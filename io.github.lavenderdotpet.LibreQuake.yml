@@ -34,8 +34,12 @@ cleanup:
   - /share/applications/fteqw.desktop
 
 modules:
-  # Dependencies for all the Quakespasm-based forks
+  # vkquake and fteqw need glu and glew
+  - shared-modules/glu/glu-9.json
+  - shared-modules/glew/glew.json
+  # QSS-M still depends on libmad even though Ironwail has switched to mpeg123
   - shared-modules/libmad/libmad.json
+  # libxmp isn't a hard requirement but in case of mods using tracker formats we'll include it
   - name: libxmp
     buildsystem: autotools
     sources:
@@ -49,7 +53,7 @@ modules:
           version-query: .tag_name | sub("^libxmp-"; "")
           url-query: .zipball_url
   # Engines
-  - engines/io.github.sezero.quakespasm.yml
+  # - engines/io.github.sezero.quakespasm.yml
   - engines/io.github.andrei_drexler.ironwail.yml
   - engines/com.quakeone.qssm.yml
   - engines/io.github.novum.vkquake.yml
@@ -76,8 +80,8 @@ modules:
     buildsystem: simple
     sources:
       - type: file
-        url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/main/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.sh
-        sha256: "3213b68de77d8ff4304980540e23610ceb8fac6360955c6554dd614396f0c666"
+        url: https://raw.githubusercontent.com/fpiesche/LibreQuake/refs/heads/patch-2/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.sh
+        sha256: "34a0e4275420812cab7abacc7360c4c5f57c443191bfbfe9fbce4055399e6407"
         dest-filename: io.github.lavenderdotpet.LibreQuake.sh
         x-checker-data:
           type: json
