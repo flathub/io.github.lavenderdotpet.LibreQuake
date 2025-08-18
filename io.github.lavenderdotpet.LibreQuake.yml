@@ -80,14 +80,7 @@ modules:
     buildsystem: simple
     sources:
       - type: file
-        url: https://raw.githubusercontent.com/fpiesche/LibreQuake/refs/heads/patch-2/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.sh
-        sha256: "34a0e4275420812cab7abacc7360c4c5f57c443191bfbfe9fbce4055399e6407"
-        dest-filename: io.github.lavenderdotpet.LibreQuake.sh
-        x-checker-data:
-          type: json
-          url: https://api.github.com/repos/lavenderdotpet/LibreQuake/releases/latest
-          version-query: .tag_name
-          url-query: ("https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/" + .tag_name + "/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.sh")
+        path: io.github.lavenderdotpet.LibreQuake.sh
       - type: file
         url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/main/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.launcher.sh
         sha256: "dd4a0eb7ad4afea5510df8e79850249bd6ce8360f6c7fec6f7c5b909819d0fd0"
@@ -138,7 +131,7 @@ modules:
         commands:
           - xdg-open $XDG_DATA_HOME
     build-commands:
-      - install -Dm755 io.github.lavenderdotpet.LibreQuake*.sh -t /app/bin/
-      - install -Dm644 io.github.lavenderdotpet.LibreQuake*.desktop -t /app/share/applications/
-      - install -Dm644 io.github.lavenderdotpet.LibreQuake.svg -t /app/share/icons/hicolor/scalable/apps/
-      - install -Dm644 io.github.lavenderdotpet.LibreQuake.metainfo.xml -t /app/share/metainfo/
+      - install -Dm755 ${FLATPAK_ID}*.sh -t /app/bin/
+      - install -Dm644 ${FLATPAK_ID}*.desktop -t /app/share/applications/
+      - install -Dm644 ${FLATPAK_ID}.svg -t /app/share/icons/hicolor/scalable/apps/
+      - install -Dm644 ${FLATPAK_ID}.metainfo.xml -t /app/share/metainfo/
