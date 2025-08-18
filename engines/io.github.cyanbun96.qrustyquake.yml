@@ -1,0 +1,20 @@
+name: qrustyquake
+buildsystem: simple
+sources:
+  - type: archive
+    url: https://api.github.com/repos/cyanbun96/qrustyquake/zipball/v0.5
+    sha256: c1b2918628795b48b96c991a7885f31dd6f714703b6509816369e743b2c2c88b
+    dest-filename: qrustyquake.zip
+    x-checker-data:
+      type: json
+      url: https://api.github.com/repos/cyanbun96/qrustyquake/releases/latest
+      version-query: .tag_name
+      url-query: .zipball_url
+  - type: file
+    path: io.github.cyanbun96.qrustyquake.svg
+subdir: src
+build-commands:
+  - make
+post-install:
+  - install -D -m755 -t /app/bin/ qrustyquake
+  - install -Dm644 ../io.github.cyanbun96.qrustyquake.svg /app/share/icons/hicolor/scalable/apps/io.github.lavenderdotpet.LibreQuake.qrustyquake.svg
