@@ -19,6 +19,11 @@ subdir: Quake
 make-args:
   - DO_USERDIRS=1
   - USE_SDL2=1
+  - USE_CODEC_XMP=1
+  - USE_CODEC_FLAC=1
+  - USE_CODEC_OPUS=1
+  - USE_CODEC_UMX=1
+  - MP3LIB=mpg123
   - LDFLAGS="-L/app/lib"
 post-install:
   - install -D -m755 -t /app/bin/ quakespasm
