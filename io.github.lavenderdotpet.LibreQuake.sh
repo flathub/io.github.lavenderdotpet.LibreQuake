@@ -44,7 +44,7 @@ if [[ ! -f "${HIDE_LAUNCHER}" ]]; then
     "fteqw"*)
       write_engine_config "fteqw"
       ;;
-    "qss-m"*)
+    "QSS-M"*)
       write_engine_config "qssm"
       ;;
     "TyrQuake"*)
