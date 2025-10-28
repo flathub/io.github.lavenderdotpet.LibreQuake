@@ -1,6 +1,6 @@
 app-id: io.github.lavenderdotpet.LibreQuake
 runtime: org.freedesktop.Platform
-runtime-version: "23.08"
+runtime-version: "25.08"
 sdk: org.freedesktop.Sdk
 command: io.github.lavenderdotpet.LibreQuake.sh
 
@@ -37,26 +37,25 @@ modules:
   # vkquake and fteqw need glu and glew
   - shared-modules/glu/glu-9.json
   - shared-modules/glew/glew.json
-  # QSS-M still depends on libmad even though Ironwail has switched to mpeg123
-  - shared-modules/libmad/libmad.json
   # libxmp isn't a hard requirement but in case of mods using tracker formats we'll include it
   - name: libxmp
     buildsystem: autotools
     sources:
       - type: archive
-        url: https://api.github.com/repos/libxmp/libxmp/zipball/libxmp-4.6.0
+        url: https://api.github.com/repos/libxmp/libxmp/zipball/libxmp-4.6.3
         dest-filename: libxmp.zip
-        sha256: 1955a7c7eb2e6c3ba2da689d115d10f89c6e5e261577e67cd0ad176bea1b97ef
+        sha256: f761dedfa698e37b240112ed8531b94dda199261f0cac338829a7f3dc0a933ef
         x-checker-data:
           type: json
           url: https://api.github.com/repos/libxmp/libxmp/releases/latest
           version-query: .tag_name | sub("^libxmp-"; "")
           url-query: .zipball_url
   # Engines
-  # - engines/io.github.sezero.quakespasm.yml
-  - engines/io.github.andrei_drexler.ironwail.yml
+  - engines/io.github.sezero.quakespasm.yml
   - engines/com.quakeone.qssm.yml
+  - engines/io.github.andrei_drexler.ironwail.yml
   - engines/io.github.novum.vkquake.yml
+  # - engines/io.github.henrique194.chocolate-quake.yml
   # - engines/org.fteqw.fteqw.yml
   # - engines/net.disenchant.tyrquake.yml
 
@@ -69,69 +68,38 @@ modules:
         x-checker-data:
           type: json
           url: https://api.github.com/repos/lavenderdotpet/LibreQuake/releases/latest
-          version-query: .tag_name
+          version-query: .tag_name | sub("^v"; "")
           url-query: .assets[] | select(.name=="full.zip") | .browser_download_url
     build-commands:
       - mkdir -p /app/share/games/librequake/id1
       - mv -v ./id1 /app/share/games/librequake
 
-  # Break this into a separate module for readability due to the complexity of sources
+  # Break this into a separate module for readability
   - name: librequake-flatpak
     buildsystem: simple
     sources:
-      - type: file
-        path: io.github.lavenderdotpet.LibreQuake.sh
-      - type: file
-        url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/main/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.launcher.sh
-        sha256: "dd4a0eb7ad4afea5510df8e79850249bd6ce8360f6c7fec6f7c5b909819d0fd0"
-        dest-filename: io.github.lavenderdotpet.LibreQuake.launcher.sh
+      - type: archive
+        url: https://github.com/lavenderdotpet/LibreQuake/zipball/19db8a5f04905f5ec0a705422d4b53720cc47f41
+        sha256: c18d12d971ba0da80656727e7cd5a83b5bc0e38e699163e1db981f6e9cb6fefb
+        dest-filename: lqgit.zip
         x-checker-data:
           type: json
-          url: https://api.github.com/repos/lavenderdotpet/LibreQuake/releases/latest
-          version-query: .tag_name
-          url-query: ("https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/" + .tag_name + "/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.launcher.sh")
-      - type: file
-        url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/main/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.desktop
-        sha256: "b5b8639d084605b1e02ed4a47118b19e3122496ca99644678ca731d30a4a57f4"
-        dest-filename: io.github.lavenderdotpet.LibreQuake.desktop
-        x-checker-data:
-          type: json
-          url: https://api.github.com/repos/lavenderdotpet/LibreQuake/releases/latest
-          version-query: .tag_name
-          url-query: ("https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/" + .tag_name + "/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.desktop")
-      - type: file
-        url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/main/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.launcher.desktop
-        sha256: "1fcc8d97f2ae56c6f8ae8c4fe8d512f90a2d13f6ad63bcec6685a543d4324a8a"
-        dest-filename: io.github.lavenderdotpet.LibreQuake.launcher.desktop
-        x-checker-data:
-          type: json
-          url: https://api.github.com/repos/lavenderdotpet/LibreQuake/releases/latest
-          version-query: .tag_name
-          url-query: ("https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/" + .tag_name + "/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.launcher.desktop")
-      - type: file
-        url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/v0.08-beta/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.svg
-        sha256: "9ebe794eed8d4a27db3f06ad6002390472c32b31fa6b22ffa945543cf3cca222"
-        dest-filename: io.github.lavenderdotpet.LibreQuake.svg
-        x-checker-data:
-          type: json
-          url: https://api.github.com/repos/lavenderdotpet/LibreQuake/releases/latest
-          version-query: .tag_name
-          url-query: ("https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/" + .tag_name + "/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.svg")
-      - type: file
-        url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/35c17070c9dfd2da484a369777cbffeb87a0c4c2/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.metainfo.xml
-        sha256: "065f84f94b58354b2b6e6a913cfbd9cb11bd29894ba27d6780fc05b6210eb5ee"
-        dest-filename: io.github.lavenderdotpet.LibreQuake.metainfo.xml
-        x-checker-data:
-          type: json
-          url: https://api.github.com/repos/lavenderdotpet/LibreQuake/releases/latest
-          version-query: .tag_name
-          url-query: ("https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/" + .tag_name + "/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.metainfo.xml")
+          url: https://api.github.com/repos/lavenderdotpet/LibreQuake/branches/main
+          version-query: .commit.sha
+          url-query: ("https://api.github.com/repos/lavenderdotpet/LibreQuake/zipball/" + .commit.sha)
       - type: script
         dest-filename: io.github.lavenderdotpet.LibreQuake.open-userdir.sh
+        dest: docs/flatpak-metadata/
         commands:
           - xdg-open $XDG_DATA_HOME
+      - type: file
+        path: io.github.lavenderdotpet.LibreQuake.sh
+        dest: docs/flatpak-metadata
     build-commands:
-      - install -Dm755 ${FLATPAK_ID}*.sh -t /app/bin/
-      - install -Dm644 ${FLATPAK_ID}*.desktop -t /app/share/applications/
-      - install -Dm644 ${FLATPAK_ID}.svg -t /app/share/icons/hicolor/scalable/apps/
-      - install -Dm644 ${FLATPAK_ID}.metainfo.xml -t /app/share/metainfo/
+      - install -Dm755 docs/flatpak-metadata/${FLATPAK_ID}.sh -t /app/bin/
+      - install -Dm755 docs/flatpak-metadata/${FLATPAK_ID}.launcher.sh -t /app/bin/
+      - install -Dm755 docs/flatpak-metadata/${FLATPAK_ID}.open-userdir.sh -t /app/bin/
+      - install -Dm644 docs/flatpak-metadata/${FLATPAK_ID}.desktop -t /app/share/applications/
+      - install -Dm644 docs/flatpak-metadata/${FLATPAK_ID}.launcher.desktop -t /app/share/applications/
+      - install -Dm644 docs/flatpak-metadata/${FLATPAK_ID}.svg -t /app/share/icons/hicolor/scalable/apps/
+      - install -Dm644 docs/flatpak-metadata/${FLATPAK_ID}.metainfo.xml -t /app/share/metainfo/
