@@ -17,6 +17,7 @@ no-autogen: true
 no-make-install: true
 subdir: Quake
 make-args:
+  - DEBUG=1
   - DO_USERDIRS=1
   - USE_SDL2=1
   - USE_CODEC_XMP=1

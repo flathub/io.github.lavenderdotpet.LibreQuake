@@ -21,6 +21,7 @@ subdir: Quake
 make-args:
   - DO_USERDIRS=1
   - USE_SDL2=1
+  - DEBUG=1
   - LDFLAGS="-L/app/lib"
 post-install:
   - install -D -m755 -t /app/bin/ ironwail
