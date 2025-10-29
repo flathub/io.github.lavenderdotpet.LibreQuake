@@ -2,12 +2,15 @@ diff --git a/Quake/sys_sdl_unix.c b/Quake/sys_sdl_unix.c
 index 3c46899..92669d6 100644
 --- a/Quake/sys_sdl_unix.c
 +++ b/Quake/sys_sdl_unix.c
-@@ -90,17 +90,7 @@ static void Sys_GetUserdir (char *dst, size_t dstsize)
+@@ -90,20 +90,10 @@ static void Sys_GetUserdir (char *dst, size_t dstsize)
  {
  	size_t		   n;
  	const char	  *home_dir = NULL;
 -	struct passwd *pwent;
 -
+	if (Sys_GetUserdirArgs (argc, argv, dst, dstsize))
+		return;
+
 -	pwent = getpwuid (getuid ());
 -	if (pwent == NULL)
 -		perror ("getpwuid");

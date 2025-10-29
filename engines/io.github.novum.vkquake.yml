@@ -25,8 +25,8 @@ modules:
           url-query: .zipball_url
 sources:
   - type: archive
-    url: https://api.github.com/repos/novum/vkquake/zipball/1.31.3
-    sha256: d4069c6fe9c0385cf214f82e25bac9a2f309bd7d2fa6e5f34024bd8014a9b1c9
+    url: https://api.github.com/repos/novum/vkquake/zipball/1.32.3.1
+    sha256: d71280f852031ec36e7efda2ecb6c2a259fe904ff80e5de2231c8825d4acf738
     dest-filename: vkquake.zip
     x-checker-data:
       type: json
@@ -40,6 +40,7 @@ sources:
 buildsystem: meson
 config-opts:
   - -Ddo_userdirs=enabled
+  - -Ddebug=true
 post-install:
   - install -D -m755 -t /app/bin/ vkquake
   - install -D -m644 -t /app/bin/ ../Quake/vkquake.pak
