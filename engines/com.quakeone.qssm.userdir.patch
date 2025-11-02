@@ -36,13 +36,6 @@ index 7ea6fd7a..709badec 100644
  
  	log_file = fopen(fname, "w");
  	if (!log_file)
-@@ -4713,4 +4713,4 @@ qboolean FS_IsCaseSensitive(void)
- 	remove(testfile_upper); // Clean up uppercase version if it exists
- 
- 	return is_case_sensitive;
--}
-\ No newline at end of file
-+}
 diff --git a/Quake/console.c b/Quake/console.c
 index 33ddc7e4..3fe8f13a 100644
 --- a/Quake/console.c
@@ -197,16 +190,3 @@ index 292ad3c0..f2c5a9c2 100644
  
  		if (f == NULL) // lets not load backup
  		{
-diff --git a/Quake/iplog.c b/Quake/iplog.c
-index 246faa75..316a9cdf 100644
---- a/Quake/iplog.c
-+++ b/Quake/iplog.c
-@@ -52,7 +52,7 @@ void IPLog_Init (void)
- 
- 	// Attempt to load log data from iplog.dat
- //	Sys_GetLock();
--	f = fopen(va("%s/id1/iplog.dat",com_basedir), "r");
-+	f = fopen(va("%s/iplog.dat", getenv("XDG_DATA_HOME")), "r");
- 	if (f)
- 	{
- 		while(fread(&temp, 20, 1, f))

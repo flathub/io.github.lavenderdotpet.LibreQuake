@@ -1,0 +1,84 @@
+diff --git a/Quake/iplog.c b/Quake/iplog.c
+index b021f892..3c5f4c8d 100644
+--- a/Quake/iplog.c
++++ b/Quake/iplog.c
+@@ -38,11 +38,11 @@ static void IPLog_MigrateFiles(void)
+ 	qboolean migrated_any = false;
+ 	
+ 	// Create paths
+-	q_snprintf(old_dat_path, sizeof(old_dat_path), "%s/id1/iplog.dat", com_basedir);
+-	q_snprintf(old_txt_path, sizeof(old_txt_path), "%s/id1/iplog.txt", com_basedir);
+-	q_snprintf(backup_dir, sizeof(backup_dir), "%s/id1/backups", com_basedir);
+-	q_snprintf(new_dat_path, sizeof(new_dat_path), "%s/id1/backups/iplog.dat", com_basedir);
+-	q_snprintf(new_txt_path, sizeof(new_txt_path), "%s/id1/backups/iplog.txt", com_basedir);
++	q_snprintf(old_dat_path, sizeof(old_dat_path), "%s/iplog.dat", getenv("XDG_DATA_HOME"));
++	q_snprintf(old_txt_path, sizeof(old_txt_path), "%s/iplog.txt", getenv("XDG_DATA_HOME"));
++	q_snprintf(backup_dir, sizeof(backup_dir), "%s/backups", getenv("XDG_DATA_HOME"));
++	q_snprintf(new_dat_path, sizeof(new_dat_path), "%s/backups/iplog.dat", getenv("XDG_DATA_HOME"));
++	q_snprintf(new_txt_path, sizeof(new_txt_path), "%s/backups/iplog.txt", getenv("XDG_DATA_HOME"));
+ 	
+ 	// Ensure backups directory exists
+ 	Sys_mkdir(backup_dir);
+@@ -200,7 +200,7 @@ IPLog_GetDataPath
+ static const char* IPLog_GetDataPath(void)
+ {
+ 	static char path[MAX_OSPATH];
+-	q_snprintf(path, sizeof(path), "%s/id1/backups/iplog.dat", com_basedir);
++	q_snprintf(path, sizeof(path), "%s/backups/iplog.dat", getenv("XDG_DATA_HOME"));
+ 	return path;
+ }
+ 
+@@ -212,7 +212,7 @@ IPLog_GetTxtPath
+ static const char* IPLog_GetTxtPath(void)
+ {
+ 	static char path[MAX_OSPATH];
+-	q_snprintf(path, sizeof(path), "%s/id1/backups/iplog.txt", com_basedir);
++	q_snprintf(path, sizeof(path), "%s/backups/iplog.txt", getenv("XDG_DATA_HOME"));
+ 	return path;
+ }
+ 
+@@ -249,7 +249,7 @@ void IPLog_Init (void)
+ 	iplog_full = 0;
+ 
+ 	// Ensure backups directory exists
+-	q_snprintf(backup_dir, sizeof(backup_dir), "%s/id1/backups", com_basedir);
++	q_snprintf(backup_dir, sizeof(backup_dir), "%s/backups", getenv("XDG_DATA_HOME"));
+ 	Sys_mkdir(backup_dir);
+ 	
+ 	// Migrate old files if they exist
+@@ -261,7 +261,7 @@ void IPLog_Init (void)
+ 	if (!f && !migrated_old_files)
+ 	{
+ 		// Fallback to old location if new location doesn't exist and migration hasn't been attempted
+-		f = fopen(va("%s/id1/iplog.dat", com_basedir), "rb");
++		f = fopen(va("%s/iplog.dat", getenv("XDG_DATA_HOME")), "rb");
+ 	}
+ 	
+ 	if (f)
+@@ -322,7 +322,7 @@ void IPLog_WriteLog (void)
+ 		return;
+ 
+ 	// Ensure backups directory exists
+-	q_snprintf(backup_dir, sizeof(backup_dir), "%s/id1/backups", com_basedir);
++	q_snprintf(backup_dir, sizeof(backup_dir), "%s/backups", getenv("XDG_DATA_HOME"));
+ 	Sys_mkdir(backup_dir);
+ 
+ //	Sys_GetLock();
+@@ -332,7 +332,7 @@ void IPLog_WriteLog (void)
+ 	if (!f && !migrated_old_files)
+ 	{
+ 		// Fallback to old location for compatibility only if we haven't migrated yet
+-		f = fopen(va("%s/id1/iplog.dat", com_basedir), "rb");
++		f = fopen(va("%s/iplog.dat", getenv("XDG_DATA_HOME")), "rb");
+ 	}
+ 	
+ 	if (f)
+@@ -543,7 +543,7 @@ void IPLog_Dump (void)
+ 	}
+ 
+ 	// Ensure backups directory exists
+-	q_snprintf(backup_dir, sizeof(backup_dir), "%s/id1/backups", com_basedir);
++	q_snprintf(backup_dir, sizeof(backup_dir), "%s/backups", getenv("XDG_DATA_HOME"));
+ 	Sys_mkdir(backup_dir);
+ 
+ 	f = fopen(IPLog_GetTxtPath(), "w");

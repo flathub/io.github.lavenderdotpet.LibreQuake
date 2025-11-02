@@ -1,23 +1,28 @@
 name: qss-m
+modules:
+  - ../shared-modules/libmad/libmad.json
 sources:
   - type: archive
-    url: https://api.github.com/repos/timbergeron/QSS-M/zipball/07001052df4c793625fa8077ed28a7b72995faa8
-    sha256: b504b1565baa8ad825b5b8ebb435ad91471a4f0c81d64ae48224f7ed90dc2336
+    url: https://api.github.com/repos/timbergeron/QSS-M/zipball/1.6.5
+    sha256: 9e52f949c7631aa005c87b37f5033c1eff02a85f512a2f335b89cd55eb425e21
     dest-filename: qssm.zip
     x-checker-data:
       type: json
-      url: https://api.github.com/repos/timbergeron/QSS-M/branches/qsrebase
-      version-query: .commit.sha
-      url-query: ("https://api.github.com/repos/timbergeron/QSS-M/zipball/" + .commit.sha)
+      url: https://api.github.com/repos/timbergeron/QSS-M/releases/latest
+      version-query: .tag_name
+      url-query: .zipball_url
   - type: file
     path: io.github.sezero.quakespasm.png
   - type: patch
     path: io.github.sezero.quakespasm.userdir_log.patch
   - type: patch
-    path: com.quakeone.qssm.userdirs.patch
+    path: com.quakeone.qssm.userdir.patch
+  - type: patch
+    path: com.quakeone.qssm.userdir_iplog.patch
 no-autogen: true
 no-make-install: true
 subdir: Quake
+builddir: true
 make-args:
   - DO_USERDIRS=1
   - USE_SDL2=1
@@ -31,4 +36,4 @@ make-args:
 post-install:
   - install -D -m755 quakespasm /app/bin/qssm
   - install -D -m644 -t /app/bin/ qssm.pak
-  - install -Dm644 ../io.github.sezero.quakespasm.png /app/share/icons/hicolor/256x256/apps/io.github.lavenderdotpet.LibreQuake.quakespasm.png
+  - install -Dm644 ${FLATPAK_BUILDER_BUILDDIR}/io.github.sezero.quakespasm.png /app/share/icons/hicolor/256x256/apps/io.github.lavenderdotpet.LibreQuake.qss-m.png
