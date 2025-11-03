@@ -44,4 +44,4 @@ config-opts:
 post-install:
   - install -D -m755 -t /app/bin/ vkquake
   # - install -D -m644 -t /app/bin/ ../Quake/vkquake.pak
-  - install -Dm644 ../io.github.sezero.quakespasm.png /app/share/icons/hicolor/256x256/apps/io.github.lavenderdotpet.LibreQuake.quakespasm.png
+  - install -D -m644 ../io.github.sezero.quakespasm.png /app/share/icons/hicolor/256x256/apps/io.github.lavenderdotpet.LibreQuake.quakespasm.png
