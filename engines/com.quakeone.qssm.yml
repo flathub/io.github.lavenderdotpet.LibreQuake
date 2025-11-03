@@ -36,4 +36,4 @@ make-args:
 post-install:
   - install -D -m755 quakespasm /app/bin/qssm
   # - install -D -m644 -t /app/bin/ qssm.pak
-  - install -Dm644 ${FLATPAK_BUILDER_BUILDDIR}/io.github.sezero.quakespasm.png /app/share/icons/hicolor/256x256/apps/io.github.lavenderdotpet.LibreQuake.qss-m.png
+  - install -D -m644 ${FLATPAK_BUILDER_BUILDDIR}/io.github.sezero.quakespasm.png /app/share/icons/hicolor/256x256/apps/io.github.lavenderdotpet.LibreQuake.qss-m.png
