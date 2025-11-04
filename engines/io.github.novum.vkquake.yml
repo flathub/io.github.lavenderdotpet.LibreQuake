@@ -35,6 +35,8 @@ sources:
       url-query: .zipball_url
   - type: patch
     path: io.github.novum.vkquake.userdir_log.patch
+  - type: patch
+    path: io.github.novum.vkquake.remove_embedded_pak.patch
   - type: file
     path: io.github.sezero.quakespasm.png
 buildsystem: meson
