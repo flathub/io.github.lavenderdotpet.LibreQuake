@@ -39,16 +39,10 @@ if [[ ! -f "${HIDE_LAUNCHER}" ]]; then
       write_engine_config "ironwail"
       ;;
     "VkQuake"*)
-      write_engine_config "vkquake"
-      ;;
-    "fteqw"*)
-      write_engine_config "fteqw"
+      write_engine_config "vkquake -fitz"
       ;;
     "QSS-M"*)
       write_engine_config "qssm"
-      ;;
-    "TyrQuake"*)
-      write_engine_config "tyrquake"
       ;;
     *)
       exit 1
