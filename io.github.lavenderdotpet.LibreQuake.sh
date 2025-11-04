@@ -38,9 +38,9 @@ if [[ ! -f "${HIDE_LAUNCHER}" ]]; then
     "Ironwail"*)
       write_engine_config "ironwail"
       ;;
-    "VkQuake"*)
-      write_engine_config "vkquake"
-      ;;
+    # "VkQuake"*)
+    #   write_engine_config "vkquake"
+    #   ;;
     "QSS-M"*)
       write_engine_config "qssm"
       ;;
@@ -64,4 +64,6 @@ elif [[ $exitcode -eq 0 ]]; then
   fi
   echo "Launching LibreQuake using ${ENGINE} ${GAME_ARGS}..."
   ${ENGINE} -basedir /app/share/games/librequake ${GAME_ARGS}
+  # Once engines start merging the -userdir update from QuakeSpasm, we can use it instead of engine patches
+  # ${ENGINE} -basedir /app/share/games/librequake -userdir ${XDG_DATA_HOME} ${GAME_ARGS}
 fi

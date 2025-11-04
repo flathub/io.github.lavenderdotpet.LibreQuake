@@ -54,7 +54,7 @@ modules:
   - engines/io.github.sezero.quakespasm.yml
   - engines/com.quakeone.qssm.yml
   - engines/io.github.andrei_drexler.ironwail.yml
-  - engines/io.github.novum.vkquake.yml
+  # - engines/io.github.novum.vkquake.yml
   # - engines/io.github.henrique194.chocolate-quake.yml
   # - engines/org.fteqw.fteqw.yml
   # - engines/net.disenchant.tyrquake.yml
