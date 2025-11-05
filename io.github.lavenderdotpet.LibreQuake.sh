@@ -13,12 +13,12 @@ if [[ ! -f "${HIDE_LAUNCHER}" ]]; then
 
 #     FALSE "FTEQW (Multiplayer)" \
 #     FALSE "TyrQuake (Software rendering)" \
+#     FALSE "VkQuake (Vulkan renderer)" \
 
   CHOICE=$(zenity --list --radiolist --hide-header --modal --width=600 --height=400 \
     --column="" --column="" \
     TRUE "Ironwail (Default)" \
     FALSE "QuakeSpasm (Basic modern engine)" \
-    FALSE "VkQuake (Vulkan renderer)" \
     FALSE "QSS-M (OpenGL 1.x/2.x for older hardware)" \
     --title "LibreQuake Launcher" \
     --text "Select which engine to launch" \
