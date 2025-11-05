@@ -10,7 +10,9 @@ sources:
       version-query: .tag_name
       url-query: .zipball_url
   - type: file
-    path: io.github.sezero.quakespasm.png
+    url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/e38e5fc2ddb0b0aa422a2be9c120fb798d67a318/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.svg
+    sha256: 9ebe794eed8d4a27db3f06ad6002390472c32b31fa6b22ffa945543cf3cca222
+    dest-filename: io.github.lavenderdotpet.LibreQuake.svg
   - type: patch
     path: io.github.sezero.quakespasm.userdir_log.patch
   - type: patch
@@ -25,4 +27,4 @@ make-args:
   - LDFLAGS="-L/app/lib"
 post-install:
   - install -D -m755 -t /app/bin/ ironwail
-  - install -D -m644 ../io.github.sezero.quakespasm.png /app/share/icons/hicolor/256x256/apps/io.github.lavenderdotpet.LibreQuake.ironwail.png
+  - install -D -m644 ${FLATPAK_BUILDER_BUILDDIR}/io.github.lavenderdotpet.LibreQuake.svg /app/share/icons/hicolor/scalable/apps/io.github.lavenderdotpet.LibreQuake.ironwail.svg
