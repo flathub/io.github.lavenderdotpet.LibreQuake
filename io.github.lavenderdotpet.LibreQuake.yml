@@ -78,28 +78,49 @@ modules:
   - name: librequake-flatpak
     buildsystem: simple
     sources:
-      - type: archive
-        url: https://github.com/lavenderdotpet/LibreQuake/zipball/19db8a5f04905f5ec0a705422d4b53720cc47f41
-        sha256: c18d12d971ba0da80656727e7cd5a83b5bc0e38e699163e1db981f6e9cb6fefb
-        dest-filename: lqgit.zip
-        x-checker-data:
-          type: json
-          url: https://api.github.com/repos/lavenderdotpet/LibreQuake/branches/main
-          version-query: .commit.sha
-          url-query: ("https://api.github.com/repos/lavenderdotpet/LibreQuake/zipball/" + .commit.sha)
       - type: script
         dest-filename: io.github.lavenderdotpet.LibreQuake.open-userdir.sh
-        dest: docs/flatpak-metadata/
         commands:
           - xdg-open $XDG_DATA_HOME
       - type: file
+        url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/e38e5fc2ddb0b0aa422a2be9c120fb798d67a318/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.launcher.sh
+        sha256: dd4a0eb7ad4afea5510df8e79850249bd6ce8360f6c7fec6f7c5b909819d0fd0
+        dest-filename: io.github.lavenderdotpet.LibreQuake.launcher.sh
+      - type: file
+        url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/e38e5fc2ddb0b0aa422a2be9c120fb798d67a318/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.launcher.desktop
+        sha256: 1fcc8d97f2ae56c6f8ae8c4fe8d512f90a2d13f6ad63bcec6685a543d4324a8a
+        dest-filename: io.github.lavenderdotpet.LibreQuake.launcher.desktop
+      - type: file
+        url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/e38e5fc2ddb0b0aa422a2be9c120fb798d67a318/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.svg
+        sha256: 9ebe794eed8d4a27db3f06ad6002390472c32b31fa6b22ffa945543cf3cca222
+        dest-filename: io.github.lavenderdotpet.LibreQuake.svg
+      - type: file
+        url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/e38e5fc2ddb0b0aa422a2be9c120fb798d67a318/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.metainfo.xml
+        sha256: 5fc4d83de0b7e5f16e95034629ef0002cc4000a6a5a91b468b7b4283767b7757
+        dest-filename: io.github.lavenderdotpet.LibreQuake.metainfo.xml
+
+      # override upstream launcher script with local copy for now
+      - type: file
         path: io.github.lavenderdotpet.LibreQuake.sh
-        dest: docs/flatpak-metadata
+      # - type: file
+      #   url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/e38e5fc2ddb0b0aa422a2be9c120fb798d67a318/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.sh
+      #   sha256: f4fdca14b6a4ddf46eb62f5d18136d5c615203a35faf0248f700eacb01fe89dd
+      #   dest-filename: io.github.lavenderdotpet.LibreQuake.sh
+
+      # override upstream desktop file with local copy for now
+      # Revert once https://github.com/lavenderdotpet/LibreQuake/pull/357 is merged
+      - type: file
+        path: io.github.lavenderdotpet.LibreQuake.desktop
+      # - type: file
+      #   url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/e38e5fc2ddb0b0aa422a2be9c120fb798d67a318/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.desktop
+      #   sha256: b5b8639d084605b1e02ed4a47118b19e3122496ca99644678ca731d30a4a57f4
+      #   dest-filename: io.github.lavenderdotpet.LibreQuake.desktop
+
     build-commands:
-      - install -Dm755 docs/flatpak-metadata/${FLATPAK_ID}.sh -t /app/bin/
-      - install -Dm755 docs/flatpak-metadata/${FLATPAK_ID}.launcher.sh -t /app/bin/
-      - install -Dm755 docs/flatpak-metadata/${FLATPAK_ID}.open-userdir.sh -t /app/bin/
-      - install -Dm644 docs/flatpak-metadata/${FLATPAK_ID}.desktop -t /app/share/applications/
-      - install -Dm644 docs/flatpak-metadata/${FLATPAK_ID}.launcher.desktop -t /app/share/applications/
-      - install -Dm644 docs/flatpak-metadata/${FLATPAK_ID}.svg -t /app/share/icons/hicolor/scalable/apps/
-      - install -Dm644 docs/flatpak-metadata/${FLATPAK_ID}.metainfo.xml -t /app/share/metainfo/
+      - install -D -m755 ${FLATPAK_ID}.sh -t /app/bin/
+      - install -D -m755 ${FLATPAK_ID}.launcher.sh -t /app/bin/
+      - install -D -m755 ${FLATPAK_ID}.open-userdir.sh -t /app/bin/
+      - install -D -m644 ${FLATPAK_ID}.desktop -t /app/share/applications/
+      - install -D -m644 ${FLATPAK_ID}.launcher.desktop -t /app/share/applications/
+      - install -D -m644 ${FLATPAK_ID}.svg -t /app/share/icons/hicolor/scalable/apps/
+      - install -D -m644 ${FLATPAK_ID}.metainfo.xml -t /app/share/metainfo/
