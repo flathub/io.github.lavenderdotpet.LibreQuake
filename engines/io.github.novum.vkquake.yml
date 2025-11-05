@@ -42,6 +42,7 @@ sources:
 buildsystem: meson
 config-opts:
   - -Ddo_userdirs=enabled
+  - -Dembed_default_pak=disabled
   - -Ddebug=true
 post-install:
   - install -D -m755 -t /app/bin/ vkquake
