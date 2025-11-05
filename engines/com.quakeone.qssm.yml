@@ -18,6 +18,8 @@ sources:
   - type: patch
     path: com.quakeone.qssm.userdir.patch
   - type: patch
+    path: com.quakeone.qssm.moddir.patch
+  - type: patch
     path: com.quakeone.qssm.userdir_iplog.patch
 no-autogen: true
 no-make-install: true
