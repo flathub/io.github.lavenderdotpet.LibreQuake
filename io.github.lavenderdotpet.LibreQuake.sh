@@ -9,12 +9,7 @@ function write_engine_config {
     echo "$1" > "${ENGINE_CONFIG}"
 }
 
-if [[ ! -f "${HIDE_LAUNCHER}" ]]; then
-
-#     FALSE "FTEQW (Multiplayer)" \
-#     FALSE "TyrQuake (Software rendering)" \
-#     FALSE "VkQuake (Vulkan renderer)" \
-
+function engine_picker {
   CHOICE=$(zenity --list --radiolist --hide-header --modal --width=600 --height=400 \
     --column="" --column="" \
     TRUE "Ironwail (Default)" \
@@ -26,6 +21,8 @@ if [[ ! -f "${HIDE_LAUNCHER}" ]]; then
     --ok-label "Launch" \
     --cancel-label "Quit" \
     --window-icon "/app/share/icons/hicolor/scalable/apps/io.github.lavenderdotpet.LibreQuake.svg")
+    # FALSE "fteqw (Multiplayer)" \
+    # FALSE "vkQuake (Vulkan renderer)" \
 
   case "$CHOICE" in
     "Open user content directory")
@@ -38,9 +35,12 @@ if [[ ! -f "${HIDE_LAUNCHER}" ]]; then
     "Ironwail"*)
       write_engine_config "ironwail"
       ;;
-    # "VkQuake"*)
-    #   write_engine_config "vkquake"
-    #   ;;
+    "vkQuake"*)
+      write_engine_config "vkquake"
+      ;;
+    "fteqw"*)
+      write_engine_config "fteqw"
+      ;;
     "QSS-M"*)
       write_engine_config "qssm"
       ;;
@@ -49,21 +49,23 @@ if [[ ! -f "${HIDE_LAUNCHER}" ]]; then
       ;;
   esac
   touch "${HIDE_LAUNCHER}"
-fi
+}
 
-exitcode=$?
-if [[ $exitcode -ne 0 ]]; then
-  echo "Quitting..."
-elif [[ $exitcode -eq 0 ]]; then
-  if [[ -f "/app/bin/$1" ]]; then
-    ENGINE="$1"
-    GAME_ARGS="${@:2}"
-  else
-    ENGINE=$(cat "${ENGINE_CONFIG}")
-    GAME_ARGS="$@"
+if [[ -f "/app/bin/$1" ]]; then
+  # If we've been called with an engine name as the first parameter, run that engine
+  # (eg. `flatpak run io.github.lavenderdotpet.LibreQuake ironwail +game some_mod`)
+  ENGINE="$1"
+  GAME_ARGS="${@:2}"
+else
+  if [[ ! -f "${HIDE_LAUNCHER}" || ! -f "${ENGINE_CONFIG}" ]]; then
+    # If either the $HIDE_LAUNCHER file *or* the engine config
+    # file is missing, show the engine picker
+    engine_picker
   fi
-  echo "Launching LibreQuake using ${ENGINE} ${GAME_ARGS}..."
-  ${ENGINE} -basedir /app/share/games/librequake ${GAME_ARGS}
-  # Once engines start merging the -userdir update from QuakeSpasm, we can use it instead of engine patches
-  # ${ENGINE} -basedir /app/share/games/librequake -userdir ${XDG_DATA_HOME} ${GAME_ARGS}
+  ENGINE=$(cat "${ENGINE_CONFIG}")
+  GAME_ARGS="$@"
 fi
+echo "Launching LibreQuake using ${ENGINE} ${GAME_ARGS}..."
+${ENGINE} -basedir /app/share/games/librequake ${GAME_ARGS}
+# Once engines start merging the -userdir update from QuakeSpasm, we can use it instead of engine patches
+# ${ENGINE} -basedir /app/share/games/librequake -userdir ${XDG_DATA_HOME} ${GAME_ARGS}
