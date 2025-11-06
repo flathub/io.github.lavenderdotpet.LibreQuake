@@ -1,0 +1,42 @@
+name: qss-m
+modules:
+  - ../shared-modules/libmad/libmad.json
+sources:
+  - type: archive
+    url: https://api.github.com/repos/timbergeron/QSS-M/zipball/1.6.5
+    sha256: 9e52f949c7631aa005c87b37f5033c1eff02a85f512a2f335b89cd55eb425e21
+    dest-filename: qssm.zip
+    x-checker-data:
+      type: json
+      url: https://api.github.com/repos/timbergeron/QSS-M/releases/latest
+      version-query: .tag_name
+      url-query: .zipball_url
+  - type: file
+    url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/e38e5fc2ddb0b0aa422a2be9c120fb798d67a318/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.svg
+    sha256: 9ebe794eed8d4a27db3f06ad6002390472c32b31fa6b22ffa945543cf3cca222
+    dest-filename: io.github.lavenderdotpet.LibreQuake.svg
+  - type: patch
+    path: io.github.sezero.quakespasm.userdir_log.patch
+  - type: patch
+    path: com.quakeone.qssm.userdir.patch
+  - type: patch
+    path: com.quakeone.qssm.moddir.patch
+  - type: patch
+    path: com.quakeone.qssm.userdir_iplog.patch
+no-autogen: true
+no-make-install: true
+subdir: Quake
+builddir: true
+make-args:
+  - DO_USERDIRS=1
+  - USE_SDL2=1
+  - USE_CODEC_XMP=1
+  - USE_CODEC_FLAC=1
+  - USE_CODEC_OPUS=1
+  - USE_CODEC_UMX=1
+  - MP3LIB=mpg123
+  - DEBUG=1
+  - QSS_LDFLAGS=-L/app/lib -Wl,--allow-multiple-definition
+post-install:
+  - install -D -m755 quakespasm /app/bin/qssm
+  - install -D -m644 ${FLATPAK_BUILDER_BUILDDIR}/io.github.lavenderdotpet.LibreQuake.svg /app/share/icons/hicolor/scalable/apps/io.github.lavenderdotpet.LibreQuake.qss-m.svg

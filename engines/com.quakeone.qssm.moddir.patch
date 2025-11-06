@@ -1,0 +1,37 @@
+diff --git a/Quake/host_cmd.c b/Quake/host_cmd.c
+index 8506a9b1..a0e50d82 100644
+--- a/Quake/host_cmd.c
++++ b/Quake/host_cmd.c
+@@ -653,13 +653,14 @@ void FolderList_Init(void)
+ 	struct dirent* dir_t;
+ 	char		dir_string[MAX_OSPATH], mod_string[MAX_OSPATH];
+ 
+-	q_snprintf(dir_string, sizeof(dir_string), "%s/", com_gamedir);
++	q_snprintf(dir_string, sizeof(dir_string), "%s/", getenv("XDG_DATA_HOME"));
+ 	dir_p = opendir(dir_string);
+ 	if (dir_p == NULL)
+ 		return;
+ 
+ 	while ((dir_t = readdir(dir_p)) != NULL)
+ 	{
++		printf("Checking %s", dir_t->d_name);
+ 		if (!strcmp(dir_t->d_name, ".") || !strcmp(dir_t->d_name, ".."))
+ 			continue;
+ 		if (!q_strcasecmp(COM_FileGetExtension(dir_t->d_name), "app")) // skip .app bundles on macOS
+@@ -669,6 +670,7 @@ void FolderList_Init(void)
+ 		if (mod_dir_p == NULL)
+ 			continue;
+ 		/* don't bother testing for pak files / progs.dat */
++		printf("Adding %s", dir_t->d_name);
+ 		FolderList_Add(dir_t->d_name);
+ 		closedir(mod_dir_p);
+ 	}
+@@ -724,7 +726,7 @@ void Modlist_Init (void)
+ 	struct dirent	*dir_t;
+ 	char		dir_string[MAX_OSPATH], mod_string[MAX_OSPATH];
+ 
+-	q_snprintf (dir_string, sizeof(dir_string), "%s/", com_basedir);
++	q_snprintf (dir_string, sizeof(dir_string), "%s/", getenv("XDG_DATA_HOME"));
+ 	dir_p = opendir(dir_string);
+ 	if (dir_p == NULL)
+ 		return;

@@ -1,0 +1,49 @@
+name: vkquake
+modules:
+  - name: spirv-tools
+    buildsystem: cmake-ninja
+    builddir: true
+    sources:
+      - type: archive
+        url: https://api.github.com/repos/KhronosGroup/SPIRV-Tools/zipball/vulkan-sdk-1.4.328.1
+        sha256: fadb4f73410ca35594656cf7486d4a13c10a0cfad80370ed23338afb8487e773
+        dest-filename: spirv-tools.zip
+        x-checker-data:
+          type: json
+          url: https://api.github.com/repos/KhronosGroup/SPIRV-Tools/releases/latest
+          version-query: .tag_name | sub("vulkan-sdk-"; "")
+          url-query: .zipball_url
+      - type: archive
+        url: https://api.github.com/repos/KhronosGroup/SPIRV-Headers/zipball/vulkan-sdk-1.4.328.1
+        sha256: 81e029b14a1b90e9fb868c75ca0049da5792b7f7941b6af3f2d42318eb66be8e
+        dest-filename: spirv-headers.zip
+        dest: external/spirv-headers
+        x-checker-data:
+          type: json
+          url: https://api.github.com/repos/KhronosGroup/SPIRV-Headers/releases/latest
+          version-query: .tag_name | sub("vulkan-sdk-"; "")
+          url-query: .zipball_url
+sources:
+  - type: archive
+    url: https://api.github.com/repos/novum/vkquake/zipball/1.32.3.1
+    sha256: d71280f852031ec36e7efda2ecb6c2a259fe904ff80e5de2231c8825d4acf738
+    dest-filename: vkquake.zip
+    x-checker-data:
+      type: json
+      url: https://api.github.com/repos/novum/vkquake/releases/latest
+      version-query: .tag_name
+      url-query: .zipball_url
+  - type: patch
+    path: io.github.novum.vkquake.userdir_log.patch
+  - type: patch
+    path: io.github.novum.vkquake.remove_embedded_pak.patch
+  - type: file
+    path: io.github.sezero.quakespasm.png
+buildsystem: meson
+config-opts:
+  - -Ddo_userdirs=enabled
+  - -Dembed_default_pak=disabled
+  - -Ddebug=true
+post-install:
+  - install -D -m755 -t /app/bin/ vkquake
+  - install -D -m644 ../io.github.sezero.quakespasm.png /app/share/icons/hicolor/256x256/apps/io.github.lavenderdotpet.LibreQuake.quakespasm.png

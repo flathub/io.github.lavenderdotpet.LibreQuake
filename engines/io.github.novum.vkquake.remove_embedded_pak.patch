@@ -1,0 +1,94 @@
+diff --git a/Quake/common.c b/Quake/common.c
+index 7836e831..2aa89d85 100644
+--- a/Quake/common.c
++++ b/Quake/common.c
+@@ -62,9 +62,11 @@ static char com_cmdline[CMDLINE_LENGTH];
+ 
+ qboolean standard_quake = true, rogue, hipnotic;
+ 
++#ifdef VKQUAKE_PAK_EMBEDDED
+ extern const unsigned char vkquake_pak[];
+ extern const int		   vkquake_pak_size;
+ extern const int		   vkquake_pak_decompressed_size;
++#endif
+ 
+ /*
+ 
+@@ -2194,7 +2196,9 @@ static void COM_AddGameDirectory (const char *dir)
+ 	pack_t		 *pak;
+ 	char		  pakfile[MAX_OSPATH];
+ 	qboolean	  been_here = false;
++#ifdef VKQUAKE_PAK_EMBEDDED
+ 	static byte	 *vkquake_pak_extracted;
++#endif
+ 
+ 	if (*com_gamenames)
+ 		q_strlcat (com_gamenames, ";", sizeof (com_gamenames));
+@@ -2249,6 +2253,7 @@ _add_path:
+ 
+ 		if ((i == 0) && (path_id == 1) && !fitzmode)
+ 		{
++#ifdef VKQUAKE_PAK_EMBEDDED
+ 			size_t vkquake_pak_size_compressed = vkquake_pak_size, vkquake_pak_size_extracted = vkquake_pak_decompressed_size;
+ 			if (!vkquake_pak_extracted)
+ 			{
+@@ -2260,9 +2265,10 @@ _add_path:
+ 											 &vkquake_pak_size_extracted, TINFL_FLAG_USING_NON_WRAPPING_OUTPUT_BUF))
+ 					Sys_Error ("Error extracting embedded pack");
+ 			}
+-			qboolean pak0_modified = com_modified;
+ 			Sys_MemFileOpenRead (vkquake_pak_extracted, vkquake_pak_size_extracted, &packhandle);
+ 			pak = COM_LoadPackFile ("vkquake.pak", packhandle);
++#endif
++			qboolean pak0_modified = com_modified;
+ 			search = (searchpath_t *)Mem_Alloc (sizeof (searchpath_t));
+ 			search->path_id = path_id;
+ 			search->pack = pak;
+diff --git a/Quake/embedded_pak.c b/Quake/embedded_pak.c
+index 6dc488ec..b9e8f76e 100644
+--- a/Quake/embedded_pak.c
++++ b/Quake/embedded_pak.c
+@@ -1,4 +1,5 @@
+ // clang-format off
++#define VKQUAKE_PAK_EMBEDDED true;
+ const unsigned char vkquake_pak[] = {
+ 0x94, 0xCD, 0x25, 0x54, 0x04, 0x61, 0x00, 0xC4, 0xF1, 0x41, 
+ 0xCE, 0x2F, 0xD2, 0x1B, 0xAE, 0xE7, 0x77, 0xB8, 0xBB, 0x7B, 
+@@ -10655,3 +10656,4 @@ const unsigned char vkquake_pak[] = {
+ 0xD1, 0x38, 0xD3, 0xDE, 0xE5, 0xD2, 0xFF, };
+ const int vkquake_pak_size = 106527;
+ const int vkquake_pak_decompressed_size = 667185;
++
+diff --git a/meson.build b/meson.build
+index 9dc6b0d7..9251b1cd 100644
+--- a/meson.build
++++ b/meson.build
+@@ -160,7 +160,6 @@ srcs = [
+     'Quake/wad.c',
+     'Quake/world.c',
+ 	'Quake/hash_map.c',
+-	'Quake/embedded_pak.c',
+ ]
+ 
+ cflags = ['-Wall', '-Wno-trigraphs', '-Werror', '-std=gnu11']
+@@ -239,6 +238,10 @@ if get_option('buildtype').startswith('debug')
+     cflags += '-D_DEBUG'
+ endif
+ 
++if get_option('embed_default_pak').enabled()
++	srcs += 'Quake/embedded_pak.c'
++endif
++
+ if get_option('do_userdirs').enabled()
+     cflags += '-DDO_USERDIRS=1'
+ endif
+diff --git a/meson_options.txt b/meson_options.txt
+index 471a306d..cedcdcf8 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -6,3 +6,5 @@ option('use_codec_opus', type : 'feature', value : 'auto')
+ option('mp3_lib', type : 'combo', value : 'mpg123', choices: ['mad', 'mpg123'])
+ option('vorbis_lib', type : 'combo', value : 'vorbis', choices: ['vorbis', 'tremor'])
+ option('do_userdirs', type: 'feature', value : 'disabled')
++option('embed_default_pak', type: 'feature', value: 'enabled',
++       description: 'Whether to embed the default vkquake.pak in the executable.')
