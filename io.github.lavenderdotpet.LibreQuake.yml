@@ -63,8 +63,8 @@ modules:
     buildsystem: simple
     sources:
       - type: archive
-        url: "https://github.com/lavenderdotpet/LibreQuake/releases/download/v0.08-beta/full.zip"
-        sha256: "b360ff9b2ba3c01da79616fb8d433abe4bbcbe38ec10b8eb71884eba3ac09534"
+        url: "https://github.com/lavenderdotpet/LibreQuake/releases/download/v0.09-beta/full.zip"
+        sha256: "623e463b35811216244f9ba15e0c45abc1765288650b5e3d36a899b35e4bcf3d"
         x-checker-data:
           type: json
           url: https://api.github.com/repos/lavenderdotpet/LibreQuake/releases/latest
@@ -83,38 +83,31 @@ modules:
         commands:
           - xdg-open $XDG_DATA_HOME
       - type: file
-        url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/e38e5fc2ddb0b0aa422a2be9c120fb798d67a318/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.launcher.sh
+        path: io.github.lavenderdotpet.LibreQuake.sh
+      - type: file
+        url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/29ba054bb5436c87ae0b94aa298537348e3d42bb/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.launcher.sh
         sha256: dd4a0eb7ad4afea5510df8e79850249bd6ce8360f6c7fec6f7c5b909819d0fd0
         dest-filename: io.github.lavenderdotpet.LibreQuake.launcher.sh
       - type: file
-        url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/e38e5fc2ddb0b0aa422a2be9c120fb798d67a318/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.launcher.desktop
+        url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/29ba054bb5436c87ae0b94aa298537348e3d42bb/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.launcher.desktop
         sha256: 1fcc8d97f2ae56c6f8ae8c4fe8d512f90a2d13f6ad63bcec6685a543d4324a8a
         dest-filename: io.github.lavenderdotpet.LibreQuake.launcher.desktop
+      # https://github.com/lavenderdotpet/LibreQuake/pull/361
       - type: file
-        url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/e38e5fc2ddb0b0aa422a2be9c120fb798d67a318/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.svg
-        sha256: 9ebe794eed8d4a27db3f06ad6002390472c32b31fa6b22ffa945543cf3cca222
+        url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/fa4adeaaf0914f4dec6f16ff5151ce21695bd105/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.svg
+        sha256: 4021b93eb69856461e2527a747273807dc1c91108a52ed6986fedc0f57a8f328
         dest-filename: io.github.lavenderdotpet.LibreQuake.svg
+      # https://github.com/lavenderdotpet/LibreQuake/pull/360
       - type: file
-        url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/e38e5fc2ddb0b0aa422a2be9c120fb798d67a318/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.metainfo.xml
-        sha256: 5fc4d83de0b7e5f16e95034629ef0002cc4000a6a5a91b468b7b4283767b7757
+        url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/7cfb42df042f8a6c439d048c8e8ea67f0f3cb31d/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.metainfo.xml
+        sha256: e15e153ea6b2be8e829577651ca271db31123d53a6f106422c12c96e8202ffb9
         dest-filename: io.github.lavenderdotpet.LibreQuake.metainfo.xml
-
-      # override upstream launcher script with local copy for now
+      # https://github.com/lavenderdotpet/LibreQuake/pull/357
       - type: file
-        path: io.github.lavenderdotpet.LibreQuake.sh
-      # - type: file
-      #   url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/e38e5fc2ddb0b0aa422a2be9c120fb798d67a318/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.sh
-      #   sha256: f4fdca14b6a4ddf46eb62f5d18136d5c615203a35faf0248f700eacb01fe89dd
-      #   dest-filename: io.github.lavenderdotpet.LibreQuake.sh
+        url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/29ba054bb5436c87ae0b94aa298537348e3d42bb/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.desktop
+        sha256: b0123fc61822e70e6bf23e67f4d1c468febee1bb510016430b45c1239087a335
+        dest-filename: io.github.lavenderdotpet.LibreQuake.desktop
 
-      # override upstream desktop file with local copy for now
-      # Revert once https://github.com/lavenderdotpet/LibreQuake/pull/357 is merged
-      - type: file
-        path: io.github.lavenderdotpet.LibreQuake.desktop
-      # - type: file
-      #   url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/e38e5fc2ddb0b0aa422a2be9c120fb798d67a318/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.desktop
-      #   sha256: b5b8639d084605b1e02ed4a47118b19e3122496ca99644678ca731d30a4a57f4
-      #   dest-filename: io.github.lavenderdotpet.LibreQuake.desktop
 
     build-commands:
       - install -D -m755 ${FLATPAK_ID}.sh -t /app/bin/
