@@ -27,9 +27,6 @@ cleanup:
   - /games
   - /lib/cmake
   - /lib/libSPIRV*.a
-  - /lib/debug/bin/spirv*
-  - /lib/debug/lib/libSPIRV*
-  - /lib/debug/source/spirv-tools
   - /lib/pkgconfig
   - /share/applications/fteqw.desktop
 
