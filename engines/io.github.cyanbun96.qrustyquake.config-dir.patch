@@ -1,0 +1,39 @@
+diff --git a/src/host.c b/src/host.c
+index 9c09e46..61d882e 100644
+--- a/src/host.c
++++ b/src/host.c
+@@ -122,7 +122,11 @@ void Host_WriteConfiguration()
+ { // Writes key bindings and archived cvars to config.cfg dedicated servers
+   // initialize the host but don't parse and set the config.cfg cvars
+ 	if(host_initialized & !isDedicated){
+-		FILE *f = fopen(va("%s/config.cfg", com_gamedir), "w");
++		struct stat st = {0};
++		if (stat(va("%s/.qrustyquake", host_parms.userdir), &st) == -1) {
++			mkdir(va("%s/.qrustyquake", host_parms.userdir), 0700);
++		}		
++		FILE *f = fopen(va("%s/.qrustyquake/config.cfg", host_parms.userdir), "w");
+ 		if(!f){
+ 			Con_Printf("Couldn't write config.cfg.\n");
+ 			return;
+@@ -130,7 +133,7 @@ void Host_WriteConfiguration()
+ 		Key_WriteBindings(f);
+ 		Cvar_WriteVariables(f);
+ 		fclose(f);
+-		Con_SafePrintf("Wrote %s/config.cfg\n", com_gamedir);
++		Con_SafePrintf("Wrote %s/.qrustyquake/config.cfg\n", host_parms.userdir);
+ 	}
+ }
+ 
+diff --git a/src/vid_sdl.c b/src/vid_sdl.c
+index 12919c0..a90d189 100644
+--- a/src/vid_sdl.c
++++ b/src/vid_sdl.c
+@@ -28,7 +28,7 @@ s32 VID_GetConfigCvar(const s8 *cvname)
+ 	// destroy them right away and only then replace them with valid ones,
+ 	// this function reads the default mode independently of the cvar status
+ 	s8 line[256], path[MAX_OSPATH];
+-	snprintf(path, sizeof(path), "%s/config.cfg", com_gamedir);
++	snprintf(path, sizeof(path), "%s/.qrustyquake/config.cfg", host_parms.userdir);
+ 	s32 ret = -1;
+ 	FILE *file = fopen(path, "r");
+ 	if(!file){
