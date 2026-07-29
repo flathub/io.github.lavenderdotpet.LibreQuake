@@ -31,9 +31,6 @@ cleanup:
   - /share/applications/fteqw.desktop
 
 modules:
-  # vkquake and fteqw need glu and glew
-  - shared-modules/glu/glu-9.json
-  - shared-modules/glew/glew.json
   # libxmp isn't a hard requirement but in case of mods using tracker formats we'll include it
   - name: libxmp
     buildsystem: autotools
@@ -49,12 +46,7 @@ modules:
           url-query: .zipball_url
   # Engines
   - engines/io.github.sezero.quakespasm.yml
-  - engines/com.quakeone.qssm.yml
   - engines/io.github.andrei_drexler.ironwail.yml
-  # - engines/io.github.novum.vkquake.yml
-  # - engines/io.github.henrique194.chocolate-quake.yml
-  # - engines/org.fteqw.fteqw.yml
-  # - engines/net.disenchant.tyrquake.yml
 
   - name: librequake-data
     buildsystem: simple

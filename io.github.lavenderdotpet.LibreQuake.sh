@@ -14,7 +14,6 @@ function engine_picker {
     --column="" --column="" \
     TRUE "Ironwail (Default)" \
     FALSE "QuakeSpasm (Basic modern engine)" \
-    FALSE "QSS-M (OpenGL 1.x/2.x for older hardware)" \
     --title "LibreQuake Launcher" \
     --text "Select which engine to launch" \
     --extra-button "Open user content directory" \
@@ -22,7 +21,6 @@ function engine_picker {
     --cancel-label "Quit" \
     --window-icon "/app/share/icons/hicolor/scalable/apps/io.github.lavenderdotpet.LibreQuake.svg")
     # FALSE "fteqw (Multiplayer)" \
-    # FALSE "vkQuake (Vulkan renderer)" \
 
   case "$CHOICE" in
     "Open user content directory")
@@ -35,14 +33,8 @@ function engine_picker {
     "Ironwail"*)
       write_engine_config "ironwail"
       ;;
-    "vkQuake"*)
-      write_engine_config "vkquake"
-      ;;
     "fteqw"*)
       write_engine_config "fteqw"
-      ;;
-    "QSS-M"*)
-      write_engine_config "qssm"
       ;;
     *)
       exit 1
