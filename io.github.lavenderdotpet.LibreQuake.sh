@@ -39,6 +39,11 @@ function engine_picker {
   touch "${HIDE_LAUNCHER}"
 }
 
+if [[ -f "${ENGINE_CONFIG}" && ! -f "/app/bin/$(cat ${ENGINE_CONFIG})" ]]; then
+  echo "Unknown engine $(cat ${ENGINE_CONFIG}) defined in ${ENGINE_CONFIG}, resetting..."
+  rm "${ENGINE_CONFIG}"
+fi
+
 if [[ -f "/app/bin/$1" ]]; then
   # If we've been called with an engine name as the first parameter, run that engine
   # (eg. `flatpak run io.github.lavenderdotpet.LibreQuake ironwail +game some_mod`)
