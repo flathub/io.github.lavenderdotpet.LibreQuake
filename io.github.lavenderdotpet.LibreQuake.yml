@@ -1,6 +1,6 @@
 app-id: io.github.lavenderdotpet.LibreQuake
 runtime: org.freedesktop.Platform
-runtime-version: '26.08'
+runtime-version: '26.08beta'
 sdk: org.freedesktop.Sdk
 command: io.github.lavenderdotpet.LibreQuake.sh
 
