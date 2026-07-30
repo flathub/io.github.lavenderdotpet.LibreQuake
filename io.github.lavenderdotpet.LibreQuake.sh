@@ -13,7 +13,6 @@ function engine_picker {
   CHOICE=$(zenity --list --radiolist --hide-header --modal --width=600 --height=400 \
     --column="" --column="" \
     TRUE "Ironwail (Default)" \
-    FALSE "QuakeSpasm (Basic modern engine)" \
     --title "LibreQuake Launcher" \
     --text "Select which engine to launch" \
     --extra-button "Open user content directory" \
@@ -26,9 +25,6 @@ function engine_picker {
     "Open user content directory")
       io.github.lavenderdotpet.LibreQuake.open-userdir.sh
       exit 2
-      ;;
-    "QuakeSpasm"*)
-      write_engine_config "quakespasm"
       ;;
     "Ironwail"*)
       write_engine_config "ironwail"

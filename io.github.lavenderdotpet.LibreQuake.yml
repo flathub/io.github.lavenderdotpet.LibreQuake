@@ -45,7 +45,6 @@ modules:
           version-query: .tag_name | sub("^libxmp-"; "")
           url-query: .zipball_url
   # Engines
-  - engines/io.github.sezero.quakespasm.yml
   - engines/io.github.andrei_drexler.ironwail.yml
 
   - name: librequake-data
