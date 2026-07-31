@@ -1,0 +1,94 @@
+name: fteqw
+buildsystem: cmake-ninja
+builddir: true
+cleanup:
+  - /bin/fteqcc
+modules:
+  - ../shared-modules/glu/glu-9.json
+  - ../shared-modules/glew/glew.json
+  - name: bullet
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+      - -DOpenGL_GL_PREFERENCE=GLVND
+      - -DBUILD_SHARED_LIBS=ON
+      - -DBULLET2_MULTITHREADING=ON
+      - -DUSE_GRAPHICAL_BENCHMARK=OFF
+      - -DBUILD_EGL=OFF
+      - -DBUILD_EXTRAS=OFF
+      - -DBUILD_CPU_DEMOS=OFF
+      - -DBUILD_OPENGL3_DEMOS=OFF
+      - -DBUILD_BULLET2_DEMOS=OFF
+      - -DBUILD_UNIT_TESTS=OFF
+      - -DINSTALL_LIBS=ON
+    sources:
+    - type: archive
+      url: https://github.com/bulletphysics/bullet3/archive/3.25.tar.gz
+      dest-filename: bullet.tar.gz
+      sha256: c45afb6399e3f68036ddb641c6bf6f552bf332d5ab6be62f7e6c54eda05ceb77
+      x-checker-data:
+        type: json
+        url: https://api.github.com/repos/bulletphysics/bullet3/releases/latest
+        version-query: .tag_name
+        url-query: .tarball_url
+
+  - name: ode
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DODE_WITH_DEMOS=OFF
+      - -DODE_WITH_TESTS=OFF
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+    cleanup:
+      - /bin/ode-config
+    sources:
+      - type: archive
+        url: https://bitbucket.org/odedevs/ode/downloads/ode-0.16.6.tar.gz
+        sha256: c91a28c6ff2650284784a79c726a380d6afec87ecf7a35c32a6be0c5b74513e8
+        x-checker-data:
+          type: anitya
+          project-id: 2532
+          url-template: https://bitbucket.org/odedevs/ode/downloads/ode-$version.tar.gz
+
+  - name: openxr
+    buildsystem: cmake-ninja
+    sources:
+      - type: archive
+        url: https://github.com/KhronosGroup/OpenXR-SDK/archive/release-1.1.61.tar.gz
+        sha256: d5e2773d282642e6e250bd10266f316fc3ff3b8602c83db009a1f434205998e6
+        x-checker-data:
+          type: json
+          url: https://api.github.com/repos/KhronosGroup/OpenXR-SDK/releases/latest
+          version-query: .tag_name | sub("release-", "")
+          url-query: .tarball_url
+
+sources:
+  - type: archive
+    url: https://api.github.com/repos/fte-team/fteqw/zipball/2025-09-27
+    sha256: 5cbbfeb4220dd6846f1eeb729666c723e42f6367a9cac3f287c1df03789da417
+    dest-filename: fteqw.zip
+    x-checker-data:
+      type: json
+      url: https://api.github.com/repos/fte-team/fteqw/releases/latest
+      version-query: .tag_name
+      url-query: .zipball_url
+  - type: patch
+    paths:
+      - org.fteqw.fteqw.fixhomedir.patch
+  - type: shell
+    commands:
+      - git apply dist/linux/org.fteqw.fteqw.fixdownloads.patch
+config-opts:
+  - -DFTE_USE_SDL=true
+  - -DFTE_ENGINE_SERVER_ONLY=false
+  - -DFTE_TOOL_QTV=false
+  - -DFTE_TOOL_MASTER=false
+  - -DFTE_TOOL_HTTPSV=false
+  - -DFTE_TOOL_QCC=true
+  - -DFTE_TOOL_IQM=false
+  - -DFTE_TOOL_IMAGE=false
+  - -DFTE_INSTALL_BINDIR=bin
+  - -DFTE_PLUG_FFMPEG=false
+post-install:
+  - mv /app/share/icons/hicolor/scalable/apps/org.fteqw.fteqw.svg /app/share/icons/hicolor/scalable/apps/${FLATPAK_ID}.fteqw.svg
+  - mv /app/share/games/quake/id1/* /app/share/games/librequake/id1/
+  - rm -rf /app/share/games/quake

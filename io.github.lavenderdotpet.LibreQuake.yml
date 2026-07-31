@@ -23,17 +23,26 @@ finish-args:
 cleanup:
   - /include
   - /bin/spirv*
-  - /bin/fteqcc
-  - /games
   - /lib/cmake
   - /lib/libSPIRV*.a
   - /lib/pkgconfig
-  - /share/applications/fteqw.desktop
 
 modules:
-  # vkquake and fteqw need glu and glew
-  - shared-modules/glu/glu-9.json
-  - shared-modules/glew/glew.json
+  - name: librequake-data
+    buildsystem: simple
+    sources:
+      - type: archive
+        url: https://github.com/lavenderdotpet/LibreQuake/releases/download/v0.09-beta/full.zip
+        sha256: 623e463b35811216244f9ba15e0c45abc1765288650b5e3d36a899b35e4bcf3d
+        x-checker-data:
+          type: json
+          url: https://api.github.com/repos/lavenderdotpet/LibreQuake/releases/latest
+          version-query: .tag_name | sub("^v"; "")
+          url-query: .assets[] | select(.name=="full.zip") | .browser_download_url
+    build-commands:
+      - mkdir -p /app/share/games/librequake/id1
+      - mv -v ./id1 /app/share/games/librequake
+
   # libxmp isn't a hard requirement but in case of mods using tracker formats we'll include it
   - name: libxmp
     buildsystem: autotools
@@ -51,25 +60,10 @@ modules:
   - engines/io.github.sezero.quakespasm.yml
   - engines/com.quakeone.qssm.yml
   - engines/io.github.andrei_drexler.ironwail.yml
+  - engines/org.fteqw.fteqw.yml
   # - engines/io.github.novum.vkquake.yml
   # - engines/io.github.henrique194.chocolate-quake.yml
-  # - engines/org.fteqw.fteqw.yml
   # - engines/net.disenchant.tyrquake.yml
-
-  - name: librequake-data
-    buildsystem: simple
-    sources:
-      - type: archive
-        url: https://github.com/lavenderdotpet/LibreQuake/releases/download/v0.09-beta/full.zip
-        sha256: 623e463b35811216244f9ba15e0c45abc1765288650b5e3d36a899b35e4bcf3d
-        x-checker-data:
-          type: json
-          url: https://api.github.com/repos/lavenderdotpet/LibreQuake/releases/latest
-          version-query: .tag_name | sub("^v"; "")
-          url-query: .assets[] | select(.name=="full.zip") | .browser_download_url
-    build-commands:
-      - mkdir -p /app/share/games/librequake/id1
-      - mv -v ./id1 /app/share/games/librequake
 
   # Break this into a separate module for readability
   - name: librequake-flatpak
@@ -104,7 +98,6 @@ modules:
         url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/29ba054bb5436c87ae0b94aa298537348e3d42bb/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.desktop
         sha256: b0123fc61822e70e6bf23e67f4d1c468febee1bb510016430b45c1239087a335
         dest-filename: io.github.lavenderdotpet.LibreQuake.desktop
-
 
     build-commands:
       - install -D -m755 ${FLATPAK_ID}.sh -t /app/bin/
