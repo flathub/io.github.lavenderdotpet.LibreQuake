@@ -1,4 +1,6 @@
 name: ironwail
+buildsystem: cmake-ninja
+builddir: true
 sources:
   - type: archive
     url: https://api.github.com/repos/andrei-drexler/ironwail/zipball/v0.8.1
@@ -17,14 +19,9 @@ sources:
     path: io.github.sezero.quakespasm.userdir_log.patch
   - type: patch
     path: io.github.andrei_drexler.ironwail.autosave-userdir.patch
-no-autogen: true
 no-make-install: true
-subdir: Quake
-make-args:
-  - DO_USERDIRS=1
-  - USE_SDL2=1
-  - DEBUG=1
-  - LDFLAGS="-L/app/lib"
+config-opts:
+  - -DENABLE_USERDIRS=1
 post-install:
   - install -D -m755 -t /app/bin/ ironwail
   - install -D -m644 ${FLATPAK_BUILDER_BUILDDIR}/io.github.lavenderdotpet.LibreQuake.svg
