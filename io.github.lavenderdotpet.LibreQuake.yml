@@ -22,13 +22,8 @@ finish-args:
 
 cleanup:
   - /include
-  - /bin/spirv*
-  - /bin/fteqcc
-  - /games
   - /lib/cmake
-  - /lib/libSPIRV*.a
   - /lib/pkgconfig
-  - /share/applications/fteqw.desktop
 
 modules:
   # libxmp isn't a hard requirement but in case of mods using tracker formats we'll include it
