@@ -6,60 +6,58 @@ cleanup:
 modules:
   - ../shared-modules/glu/glu-9.json
   - ../shared-modules/glew/glew.json
-  - name: bullet
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-      - -DOpenGL_GL_PREFERENCE=GLVND
-      - -DBUILD_SHARED_LIBS=ON
-      - -DBULLET2_MULTITHREADING=ON
-      - -DUSE_GRAPHICAL_BENCHMARK=OFF
-      - -DBUILD_EGL=OFF
-      - -DBUILD_EXTRAS=OFF
-      - -DBUILD_CPU_DEMOS=OFF
-      - -DBUILD_OPENGL3_DEMOS=OFF
-      - -DBUILD_BULLET2_DEMOS=OFF
-      - -DBUILD_UNIT_TESTS=OFF
-      - -DINSTALL_LIBS=ON
-    sources:
-    - type: archive
-      url: https://github.com/bulletphysics/bullet3/archive/3.25.tar.gz
-      dest-filename: bullet.tar.gz
-      sha256: c45afb6399e3f68036ddb641c6bf6f552bf332d5ab6be62f7e6c54eda05ceb77
-      x-checker-data:
-        type: json
-        url: https://api.github.com/repos/bulletphysics/bullet3/releases/latest
-        version-query: .tag_name
-        url-query: .tarball_url
-
-  - name: ode
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DODE_WITH_DEMOS=OFF
-      - -DODE_WITH_TESTS=OFF
-      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-    cleanup:
-      - /bin/ode-config
-    sources:
-      - type: archive
-        url: https://bitbucket.org/odedevs/ode/downloads/ode-0.16.6.tar.gz
-        sha256: c91a28c6ff2650284784a79c726a380d6afec87ecf7a35c32a6be0c5b74513e8
-        x-checker-data:
-          type: anitya
-          project-id: 2532
-          url-template: https://bitbucket.org/odedevs/ode/downloads/ode-$version.tar.gz
-
-  - name: openxr
-    buildsystem: cmake-ninja
-    sources:
-      - type: archive
-        url: https://github.com/KhronosGroup/OpenXR-SDK/archive/release-1.1.61.tar.gz
-        sha256: d5e2773d282642e6e250bd10266f316fc3ff3b8602c83db009a1f434205998e6
-        x-checker-data:
-          type: json
-          url: https://api.github.com/repos/KhronosGroup/OpenXR-SDK/releases/latest
-          version-query: .tag_name | sub("release-", "")
-          url-query: .tarball_url
+  # - name: bullet
+  #   buildsystem: cmake-ninja
+  #   config-opts:
+  #     - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+  #     - -DOpenGL_GL_PREFERENCE=GLVND
+  #     - -DBUILD_SHARED_LIBS=ON
+  #     - -DBULLET2_MULTITHREADING=ON
+  #     - -DUSE_GRAPHICAL_BENCHMARK=OFF
+  #     - -DBUILD_EGL=OFF
+  #     - -DBUILD_EXTRAS=OFF
+  #     - -DBUILD_CPU_DEMOS=OFF
+  #     - -DBUILD_OPENGL3_DEMOS=OFF
+  #     - -DBUILD_BULLET2_DEMOS=OFF
+  #     - -DBUILD_UNIT_TESTS=OFF
+  #     - -DINSTALL_LIBS=ON
+  #   sources:
+  #   - type: archive
+  #     url: https://github.com/bulletphysics/bullet3/archive/3.25.tar.gz
+  #     dest-filename: bullet.tar.gz
+  #     sha256: c45afb6399e3f68036ddb641c6bf6f552bf332d5ab6be62f7e6c54eda05ceb77
+  #     x-checker-data:
+  #       type: json
+  #       url: https://api.github.com/repos/bulletphysics/bullet3/releases/latest
+  #       version-query: .tag_name
+  #       url-query: .tarball_url
+  # - name: ode
+  #   buildsystem: cmake-ninja
+  #   config-opts:
+  #     - -DODE_WITH_DEMOS=OFF
+  #     - -DODE_WITH_TESTS=OFF
+  #     - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+  #   cleanup:
+  #     - /bin/ode-config
+  #   sources:
+  #     - type: archive
+  #       url: https://bitbucket.org/odedevs/ode/downloads/ode-0.16.6.tar.gz
+  #       sha256: c91a28c6ff2650284784a79c726a380d6afec87ecf7a35c32a6be0c5b74513e8
+  #       x-checker-data:
+  #         type: anitya
+  #         project-id: 2532
+  #         url-template: https://bitbucket.org/odedevs/ode/downloads/ode-$version.tar.gz
+  # - name: openxr
+  #   buildsystem: cmake-ninja
+  #   sources:
+  #     - type: archive
+  #       url: https://github.com/KhronosGroup/OpenXR-SDK/archive/release-1.1.61.tar.gz
+  #       sha256: d5e2773d282642e6e250bd10266f316fc3ff3b8602c83db009a1f434205998e6
+  #       x-checker-data:
+  #         type: json
+  #         url: https://api.github.com/repos/KhronosGroup/OpenXR-SDK/releases/latest
+  #         version-query: .tag_name | sub("release-", "")
+  #         url-query: .tarball_url
 
 sources:
   - type: archive
@@ -78,16 +76,62 @@ sources:
     commands:
       - git apply dist/linux/org.fteqw.fteqw.fixdownloads.patch
 config-opts:
-  - -DFTE_USE_SDL=true
-  - -DFTE_ENGINE_SERVER_ONLY=false
-  - -DFTE_TOOL_QTV=false
-  - -DFTE_TOOL_MASTER=false
-  - -DFTE_TOOL_HTTPSV=false
+  - -DFTE_INSTALL_BINDIR=bin
+  # Use SDL3 instead of SDL2
+  - -DFTE_DEP_SDL3=true
+  # fteqcc is required for some of the plugins
   - -DFTE_TOOL_QCC=true
+  # FFMPEG for extra audio format support (mp3 etc)
+  - -DFTE_PLUG_FFMPEG=true
+  # System menu plugin - requires fteqcc
+  - -DFTE_MENU_SYS=true
+  # EZQuake HUD script compatibility
+  - -DFTE_PLUG_EZHUD=true
+  # Quake Injector plugin
+  - -DFTE_PLUG_QI=false
+  # OpenSSL support
+  - -DFTE_PLUG_OPENSSL=false
+  # NameMaker plugin
+  - -DFTE_PLUG_NAMEMAKER=false
+  # IRC client chat
+  - -DFTE_PLUG_IRC=false
+  # XMPP chat
+  - -DFTE_PLUG_XMPP=false
+  # Blizzard MPQ file format
+  - -DFTE_PLUG_MPQ=false
+  # Half-Life 2 file formats
+  - -DFTE_PLUG_HL2=false
+  # Model formats
+  - -DFTE_PLUG_MODELS=false
+  # Counter-Strike addon
+  - -DFTE_CSADDON=false
+  # Quake 3 gamecode
+  - -DFTE_PLUG_QUAKE3=false
+  # Call of Duty file formats
+  - -DFTE_PLUG_COD=false
+  # X11 Server
+  - -DFTE_PLUG_X11SV=false
+  # MIDI audio
+  - -DFTE_PLUG_TIMIDITY=false
+  # OpenXR VR
+  - -DFTE_PLUG_OPENXR=false
+  # libCEF web browser
+  - -DFTE_PLUG_CEF=false
+  # Server tools: Dedicated server, QTV, master server and http server
+  - -DFTE_ENGINE_SERVER_ONLY=false
+  - -DFTE_TOOL_HTTPSV=false
+  - -DFTE_TOOL_MASTER=false
+  - -DFTE_TOOL_QTV=false
+  # Dev tools
   - -DFTE_TOOL_IQM=false
   - -DFTE_TOOL_IMAGE=false
-  - -DFTE_INSTALL_BINDIR=bin
-  - -DFTE_PLUG_FFMPEG=false
+  - -DFTE_TOOL_QCVM=false
+  - -DFTE_PLUG_TERRAINGEN=false
+  - -DFTE_TOOL_QCCGUI=false
+  # Physics engines
+  - -DFTE_PLUG_ODE=false
+  - -DFTE_PLUG_BULLET=false
+
 post-install:
   - mv /app/share/icons/hicolor/scalable/apps/org.fteqw.fteqw.svg /app/share/icons/hicolor/scalable/apps/${FLATPAK_ID}.fteqw.svg
   - mv /app/share/games/quake/id1/* /app/share/games/librequake/id1/
