@@ -24,5 +24,5 @@ config-opts:
   - -DENABLE_USERDIRS=1
 post-install:
   - install -D -m755 -t /app/bin/ ironwail
-  - install -D -m644 ${FLATPAK_BUILDER_BUILDDIR}/io.github.lavenderdotpet.LibreQuake.svg
-    /app/share/icons/hicolor/scalable/apps/io.github.lavenderdotpet.LibreQuake.ironwail.svg
+  - install -D -m644 ${FLATPAK_BUILDER_BUILDDIR}/${FLATPAK_ID}.svg
+    /app/share/icons/hicolor/scalable/apps/${FLATPAK_ID}.ironwail.svg
