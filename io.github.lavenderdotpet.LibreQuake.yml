@@ -1,6 +1,6 @@
 app-id: io.github.lavenderdotpet.LibreQuake
 runtime: org.freedesktop.Platform
-runtime-version: '25.08'
+runtime-version: &runtime-version '25.08'
 sdk: org.freedesktop.Sdk
 command: io.github.lavenderdotpet.LibreQuake.sh
 
@@ -21,11 +21,23 @@ finish-args:
   - --env=SDL_VIDEO_X11_WMCLASS=io.github.lavenderdotpet.LibreQuake
 
 cleanup:
+  - /CEF
   - /include
   - /bin/spirv*
   - /lib/cmake
   - /lib/libSPIRV*.a
   - /lib/pkgconfig
+
+cleanup-commands:
+  - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg
+
+add-extensions:
+  org.freedesktop.Platform.ffmpeg-full:
+    directory: lib/ffmpeg
+    add-ld-path: .
+    version: *runtime-version
+    autodownload: true
+    autodelete: false
 
 modules:
   - name: librequake-data
