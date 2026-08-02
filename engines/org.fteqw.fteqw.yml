@@ -1,0 +1,190 @@
+name: fteqw
+buildsystem: cmake-ninja
+builddir: true
+cleanup:
+  - /bin/fteqcc
+modules:
+  - ../shared-modules/glu/glu-9.json
+  - ../shared-modules/glew/glew.json
+  - name: bullet
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+      - -DOpenGL_GL_PREFERENCE=GLVND
+      - -DBUILD_SHARED_LIBS=ON
+      - -DBULLET2_MULTITHREADING=ON
+      - -DUSE_GRAPHICAL_BENCHMARK=OFF
+      - -DBUILD_EGL=OFF
+      - -DBUILD_EXTRAS=OFF
+      - -DBUILD_CPU_DEMOS=OFF
+      - -DBUILD_OPENGL3_DEMOS=OFF
+      - -DBUILD_BULLET2_DEMOS=OFF
+      - -DBUILD_UNIT_TESTS=OFF
+      - -DINSTALL_LIBS=ON
+    sources:
+    - type: archive
+      url: https://api.github.com/repos/bulletphysics/bullet3/tarball/3.25
+      sha256: 791037f6c59fd28080a5d2a7b84b8c7b1181ae079e9e340e0f0b4093e2489e73
+      dest-filename: bullet.tar.gz
+      x-checker-data:
+        type: json
+        url: https://api.github.com/repos/bulletphysics/bullet3/releases/latest
+        version-query: .tag_name
+        url-query: .tarball_url
+  - name: ode
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DODE_WITH_DEMOS=OFF
+      - -DODE_WITH_TESTS=OFF
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+    cleanup:
+      - /bin/ode-config
+    sources:
+      - type: archive
+        url: https://bitbucket.org/odedevs/ode/downloads/ode-0.16.6.tar.gz
+        sha256: c91a28c6ff2650284784a79c726a380d6afec87ecf7a35c32a6be0c5b74513e8
+        dest-filename: libode.tar.gz
+        x-checker-data:
+          type: anitya
+          project-id: 2532
+          url-template: https://bitbucket.org/odedevs/ode/downloads/ode-$version.tar.gz
+  - name: openxr
+    buildsystem: cmake-ninja
+    sources:
+      - type: archive
+        url: https://api.github.com/repos/KhronosGroup/OpenXR-SDK/tarball/release-1.1.62
+        sha256: 412284b9ba155308d739e23020882ca230250ef0d561de56cfde7804c8682fab
+        dest-filename: openxr.tar.gz
+        x-checker-data:
+          type: json
+          url: https://api.github.com/repos/KhronosGroup/OpenXR-SDK/releases/latest
+          version-query: .tag_name | sub("release-";"")
+          url-query: .tarball_url
+  - name: cef
+    buildsystem: cmake-ninja
+    no-make-install: true
+    config-opts:
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+      - -DCMAKE_BUILD_TYPE=RELEASE
+    make-args:
+      - libcef_dll_wrapper
+    build-commands:
+      - mkdir -p /app/CEF
+      - cp -R . /app/CEF
+      - strip Release/libcef.so Release/chrome-sandbox
+      - install -m644 -t /app/lib/ Release/chrome-sandbox Release/libcef.so Release/*.bin
+      - cp -r Release/swiftshader /app/lib/
+      - cp libcef_dll_wrapper/libcef_dll_wrapper.a /app/lib/
+    cleanup:
+      - "*.a"
+      - "./*"
+    sources:
+      - type: archive
+        only-arches:
+          - x86_64
+        url: https://cef-builds.spotifycdn.com/cef_binary_94.4.1+g4b61a8c+chromium-94.0.4606.54_linux64_minimal.tar.bz2
+        sha256: 05d420cdc084fbe4821b2c07f1d1517734a28c25caaa41c925bb229db59802fd
+      - type: archive
+        only-arches:
+          - aarch64
+        url: https://cef-builds.spotifycdn.com/cef_binary_94.4.1+g4b61a8c+chromium-94.0.4606.54_linuxarm64_minimal.tar.bz2
+        sha256: 085076771365ff96ae9c55b746e6ad7c043206490df78a73c69ace06c20cde06
+      - type: patch
+        path: org.fteqw.fteqw.cef_werror.patch
+
+sources:
+  - type: archive
+    url: https://fastdl.idtech.space/bin/fteqw-src-2026-07-13.zip
+    sha256: f1d4145be1976040b47c01c6cba2981a489c85138564048dae82f370c92656b7
+    dest-filename: fteqw.zip
+    x-checker-data:
+      type: html
+      url: https://fteqw.org/
+      pattern: "<a class=\"downloadButton\" href=\"(https://fastdl.idtech.space/bin/fteqw-src-(\\d{4}-\\d{2}-\\d{2}).zip)\">"
+      sort-matches: false
+  - type: archive
+    url: https://api.github.com/repos/KhronosGroup/Vulkan-Headers/zipball/v1.4.358
+    sha256: 97c2fe1ab9e4191eae0e7f7ff5eee795666a5e97c1403f9deede5f08dea5ca13
+    dest-filename: vulkan-headers.zip
+    dest: external/vulkan-headers
+    x-checker-data:
+      type: anitya
+      project-id: 88835
+      url-template: https://api.github.com/repos/KhronosGroup/Vulkan-Headers/zipball/v${version}
+  - type: patch
+    paths:
+      - org.fteqw.fteqw.fixhomedir.patch
+  - type: shell
+    commands:
+      - git apply dist/linux/org.fteqw.fteqw.fixdownloads.patch
+      - mv external/vulkan-headers/include/vulkan .
+  - type: shell
+    only-arches:
+      - x86_64
+    commands:
+      - ln -s /app/CEF plugins/cef/cef_linux64
+  - type: shell
+    only-arches:
+      - aarch64
+    commands:
+      - ln -s /app/CEF plugins/cef/cef_linuxarm64
+
+config-opts:
+  - -DFTE_INSTALL_BINDIR=bin
+  # Use SDL3 instead of SDL2
+  - -DFTE_DEP_SDL3=true
+  # fteqcc is required for some of the plugins
+  - -DFTE_TOOL_QCC=true
+  # FFMPEG for extra audio format support (mp3 etc)
+  - -DFTE_PLUG_FFMPEG=true
+  # System menu plugin - requires fteqcc
+  - -DFTE_MENU_SYS=false
+  # EZQuake HUD script compatibility
+  - -DFTE_PLUG_EZHUD=false
+  # Quake Injector plugin
+  - -DFTE_PLUG_QI=true
+  # NameMaker plugin fails to build with compile errors in plugin.h
+  - -DFTE_PLUG_NAMEMAKER=false
+  # IRC client chat
+  - -DFTE_PLUG_IRC=true
+  # XMPP chat
+  - -DFTE_PLUG_XMPP=true
+  # Blizzard MPQ file format
+  - -DFTE_PLUG_MPQ=true
+  # Half-Life 2 file formats
+  - -DFTE_PLUG_HL2=true
+  # Model formats
+  - -DFTE_PLUG_MODELS=true
+  # Clientside addon
+  - -DFTE_CSADDON=false
+  # Quake 3 gamecode
+  - -DFTE_PLUG_QUAKE3=true
+  # Call of Duty file formats
+  - -DFTE_PLUG_COD=true
+  # X11 Server fails to compile
+  - -DFTE_PLUG_X11SV=false
+  # MIDI audio
+  - -DFTE_PLUG_TIMIDITY=false
+  # OpenXR VR
+  - -DFTE_PLUG_OPENXR=true
+  # libCEF web browser
+  - -DFTE_PLUG_CEF=true
+  # Physics engines
+  - -DFTE_PLUG_ODE=true
+  - -DFTE_PLUG_BULLET=true
+  # OpenSSL support is unnecessary as we have GnuTLS
+  - -DFTE_PLUG_OPENSSL=false
+  # Server tools: Dedicated server, QTV, master server and http server
+  - -DFTE_ENGINE_SERVER_ONLY=false
+  - -DFTE_TOOL_HTTPSV=false
+  - -DFTE_TOOL_MASTER=false
+  - -DFTE_TOOL_QTV=false
+  # Dev tools
+  - -DFTE_TOOL_IQM=false
+  - -DFTE_TOOL_IMAGE=false
+  - -DFTE_TOOL_QCVM=false
+  - -DFTE_PLUG_TERRAINGEN=false
+  - -DFTE_TOOL_QCCGUI=false
+
+post-install:
+  - mv /app/share/icons/hicolor/scalable/apps/org.fteqw.fteqw.svg /app/share/icons/hicolor/scalable/apps/${FLATPAK_ID}.fteqw.svg
