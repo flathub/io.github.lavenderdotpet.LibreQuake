@@ -15,6 +15,7 @@ function engine_picker {
     TRUE "Ironwail (Default)" \
     FALSE "QuakeSpasm (Basic modern engine)" \
     FALSE "QSS-M (OpenGL 1.x/2.x for older hardware)" \
+    FALSE "QrustyQuake (Modern engine with WinQuake compatibility)" \
     --title "LibreQuake Launcher" \
     --text "Select which engine to launch" \
     --extra-button "Open user content directory" \
@@ -43,6 +44,9 @@ function engine_picker {
       ;;
     "QSS-M"*)
       write_engine_config "qssm"
+      ;;
+    "QrustyQuake"*)
+      write_engine_config "qrustyquake"
       ;;
     *)
       exit 1

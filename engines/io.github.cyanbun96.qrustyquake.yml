@@ -1,0 +1,23 @@
+name: qrustyquake
+buildsystem: cmake-ninja
+no-make-install: true
+sources:
+  - type: archive
+    url: https://api.github.com/repos/cyanbun96/qrustyquake/zipball/v0.8.3
+    sha256: 62a0f9f347a35abfa2e8b6ef68a44c84d597c1c04cff57e8e0a2864b97d8c786
+    dest-filename: qrustyquake.zip
+    x-checker-data:
+      type: json
+      url: https://api.github.com/repos/cyanbun96/qrustyquake/releases/latest
+      version-query: .tag_name
+      url-query: .zipball_url
+  - type: file
+    url: https://raw.githubusercontent.com/lavenderdotpet/LibreQuake/e38e5fc2ddb0b0aa422a2be9c120fb798d67a318/docs/flatpak-metadata/io.github.lavenderdotpet.LibreQuake.svg
+    sha256: 9ebe794eed8d4a27db3f06ad6002390472c32b31fa6b22ffa945543cf3cca222
+    dest-filename: io.github.lavenderdotpet.LibreQuake.svg
+  - type: patch
+    path: io.github.cyanbun96.qrustyquake.config-dir.patch
+post-install:
+  - install -D -m755 -t /app/bin/ qrustyquake
+  - install -D -m644 ${FLATPAK_BUILDER_BUILDDIR}/${FLATPAK_ID}.svg
+    /app/share/icons/hicolor/scalable/apps/${FLATPAK_ID}.qrustyquake.svg
