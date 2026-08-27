@@ -1,0 +1,13 @@
+diff --git a/engine/common/fs.c b/engine/common/fs.c
+index 68b59d1b9..412d01bb7 100644
+--- a/engine/common/fs.c
++++ b/engine/common/fs.c
+@@ -466,7 +466,7 @@ static searchpath_t *gameonly_gamedir;
+ 
+ char	com_gamepath[MAX_OSPATH];	//c:\games\quake
+ char	com_homepath[MAX_OSPATH];	//c:\users\foo\my docs\fte\quake
+-qboolean	com_homepathenabled;
++qboolean	com_homepathenabled = true;
+ static qboolean	com_homepathusable;	//com_homepath is safe, even if not enabled.
+ 
+ //char	com_configdir[MAX_OSPATH];	//homedir/fte/configs
