@@ -13,8 +13,6 @@ function engine_picker {
   CHOICE=$(zenity --list --radiolist --hide-header --modal --width=600 --height=400 \
     --column="" --column="" \
     TRUE "Ironwail (Default)" \
-    FALSE "QuakeSpasm (Basic modern engine)" \
-    FALSE "QSS-M (OpenGL 1.x/2.x for older hardware)" \
     --title "LibreQuake Launcher" \
     --text "Select which engine to launch" \
     --extra-button "Open user content directory" \
@@ -22,27 +20,17 @@ function engine_picker {
     --cancel-label "Quit" \
     --window-icon "/app/share/icons/hicolor/scalable/apps/io.github.lavenderdotpet.LibreQuake.svg")
     # FALSE "fteqw (Multiplayer)" \
-    # FALSE "vkQuake (Vulkan renderer)" \
 
   case "$CHOICE" in
     "Open user content directory")
       io.github.lavenderdotpet.LibreQuake.open-userdir.sh
       exit 2
       ;;
-    "QuakeSpasm"*)
-      write_engine_config "quakespasm"
-      ;;
     "Ironwail"*)
       write_engine_config "ironwail"
       ;;
-    "vkQuake"*)
-      write_engine_config "vkquake"
-      ;;
     "fteqw"*)
       write_engine_config "fteqw"
-      ;;
-    "QSS-M"*)
-      write_engine_config "qssm"
       ;;
     *)
       exit 1
@@ -50,6 +38,11 @@ function engine_picker {
   esac
   touch "${HIDE_LAUNCHER}"
 }
+
+if [[ -f "${ENGINE_CONFIG}" && ! -f "/app/bin/$(cat ${ENGINE_CONFIG})" ]]; then
+  echo "Unknown engine $(cat ${ENGINE_CONFIG}) defined in ${ENGINE_CONFIG}, resetting..."
+  rm "${ENGINE_CONFIG}"
+fi
 
 if [[ -f "/app/bin/$1" ]]; then
   # If we've been called with an engine name as the first parameter, run that engine
