@@ -10,7 +10,6 @@ finish-args:
   - --socket=fallback-x11
   - --share=ipc
   # Audio and hardware 3D
-  - --device=dri
   - --socket=pulseaudio
   # Input devices
   - --device=all # Change to device=input once resolved. See https://discourse.flathub.org/t/support-for-device-input/6645  and https://github.com/flatpak/flatpak/issues/5681
