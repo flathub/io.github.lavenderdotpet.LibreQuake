@@ -3,8 +3,8 @@ modules:
   - ../shared-modules/libmad/libmad.json
 sources:
   - type: archive
-    url: https://api.github.com/repos/timbergeron/QSS-M/zipball/1.6.5
-    sha256: 9e52f949c7631aa005c87b37f5033c1eff02a85f512a2f335b89cd55eb425e21
+    url: https://api.github.com/repos/timbergeron/QSS-M/zipball/1.7.0
+    sha256: c64b6bff5c19ff50d635a86b303de930274fb4e8ee7f0a8a22f94b54a8023b7d
     dest-filename: qssm.zip
     x-checker-data:
       type: json
